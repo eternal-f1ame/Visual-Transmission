@@ -29,12 +29,12 @@ for i in data:
 
 print(data)
 print(len(data))
-arr = "Rev"
+arr = "HelloMynameisRev"
 
 
 for _ in range(2):
     # userinput = input('What data you want to send: ')
-    for i in range(len(arr)):
-        ser.write(bytearray(arr[i],'ascii'))
+    for i in range(len(temp)):
+        ser.write(bytearray(temp[i],'ascii'))
         print(i,ser.readline().decode('ascii'))
     
