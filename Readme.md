@@ -1,9 +1,9 @@
-# Computer Vision Course Project 1 (2023)
+# Communication Systems Lab Project(2023)
 
 ___
 [Report](/documents/report.pdf) -  [Demo-video](https://www.youtube.com/)
 
-* This repository contains codes and demonstrations for the Computer Vision Course Project 1 on `Image Watermarking`.
+* This repository contains codes and demonstrations for the transmission of reception of images over visible electromagnetic spectrum
 
 ___
 
