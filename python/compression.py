@@ -112,7 +112,7 @@ class TransmissionData():
         with open('huffman_codes.json', 'w') as f:
             json.dump(huffman_codes, f)
 
-img = np.array(PIL.Image.open('images/amongus.png').convert('L'))
+img = np.array(PIL.Image.open('images/butterfly.png').convert('L'))
 img = img//4
 transmission_data = TransmissionData(img, huffman_codes)
 transmission_data.show_image()
