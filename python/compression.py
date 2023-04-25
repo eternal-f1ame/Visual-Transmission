@@ -2,6 +2,9 @@ import heapq
 import collections
 import matplotlib.pyplot as plt
 import json
+import numpy as np
+import PIL
+import serial
 
 with open('char_map.json', 'r') as f:
     char_map = json.load(f)
@@ -17,8 +20,10 @@ class TransmissionData():
         self.information = self.make_string_from_image()
         self.string = '<l>'+str(img.shape[0])+'<h>'+str(img.shape[1])+'<s>'+self.make_string_from_image()+'<e>'
         self.huffman_codes = huffman_codes
-        self.encoded_string = self.huffman_encode()
+        self.encoded_binary = self.huffman_encode()
+        self.encoded_string = self.make_string()
         self.encoded_string_length = len(self.encoded_string)
+
 
         self.send()
 
@@ -43,15 +48,34 @@ class TransmissionData():
             for pair in hi[1:]:
                 pair[1] = '1' + pair[1]
             heapq.heappush(heap, [lo[0] + hi[0]] + lo[1:] + hi[1:])
-
+        
         return ''.join(self.huffman_codes[char] for char in text)
 
+    def make_string(self):
+        data = ""
+        binary_string = self.encoded_binary
+        while(len(binary_string)%7==0):
+            binary_string+="0"
+        cur = 0
+        cnt = 0
+        for i in range(len(binary_string)):
+            if(binary_string[i]=='1'):
+                cur+=(1<<cnt)
+            cnt+=1
+            if(cnt==7):
+                data+=(chr(cur))
+                cur = 0
+                cnt = 0
+
+        return data
+        
     def show_image(self):
         plt.imshow(self.img, cmap='gray')
         plt.show()
 
     def send(self):
         ser = serial.Serial("/dev/tty.usbmodem11101", baudrate = 9600, timeout=3)
+        # print(len(self.string))
         for _ in range(2):
             for i in range(len(self.encoded_string)):
                 ser.write(bytearray(self.encoded_string[i],'ascii'))

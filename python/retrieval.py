@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import json
+import serial
 
 with open('char_map.json', 'r') as f:
     char_map = json.load(f)
@@ -11,9 +12,9 @@ reverse_char_map = {v: k for k, v in char_map.items()}
 huffman_codes = json.load(open('huffman_codes.json', 'r'))
 
 class RecievedData():
-    def __init__(self, huffman_codes):
+    def __init__(self,string, huffman_codes):
 
-        self.string = self.recieve()
+        self.string = string
         self.huffman_codes = huffman_codes
         self.decoded_string = self.huffman_decode()
         start = self.decoded_string.find('<s>')+3
@@ -56,15 +57,69 @@ class RecievedData():
     def recieve(self):
         switch = False
         ser = serial.Serial("/dev/tty.usbmodem11101", baudrate = 9600, timeout=3)
-        string = ''
+        data = []
+        iters = 0
         while True:
-            string += ser.readline().decode('ascii')
-            if '<s>' in string:
-                switch = True
-            if switch:
-                if '<e>' in string:
-                    break
-        return string
+            arduinoData = ser.readline()
+            print(arduinoData)
+            if(arduinoData == b'\xd9\n' or arduinoData ==b'\0xff\n'):
+                print("Started")
+            elif(arduinoData== b'' or arduinoData == b'\n'):
+                iters+=1
+                print("waiting")
+            else:
+                iters = 0
+                c = arduinoData.decode('ascii')
+                data.append(int(c))
+            if(iters>5):
+                break
+        binary_data = ""
+        for i in data:
+            for j in range(7):
+                if(i&(1<<j)):
+                    binary_data+='1'
+                else:
+                    binary_data+='0'
+        print(len(binary_data))
+        return binary_data
 
-recieved_data = RecievedData(huffman_codes)
-recieved_data.show_image()
+# recieved_data = RecievedData(huffman_codes)
+# recieved_data.show_image()
+if __name__ == '__main__':
+    ser = serial.Serial("/dev/tty.usbmodem11201", baudrate = 9600, timeout=1)
+    # temp = ""
+    iters = 0
+    vals = []
+    print("Started Receiving")
+    while 1:
+        arduinoData = ser.readline()
+        # temp+=arduinoData
+        # print(arduinoData)
+        if(arduinoData == b'\xd9\n' or arduinoData ==b'\0xff\n'):
+            print("Started")
+        elif(arduinoData== b''):
+            iters+=1
+            print("waiting")
+        # elif(arduinoData==b'\r\n'):
+        #     print("")
+        else:
+            iters =0
+            c = arduinoData.decode('ascii')
+            print(type(c),len(c),c)
+            vals.append(int(c))
+        # f.writelines(arduinoData)
+        if(iters>5):
+            break
+    binary_data = ""
+    for i in vals:
+        for j in range(7):
+            if(i&(1<<j)):
+                binary_data+='1'
+            else:
+                binary_data+='0'
+    print(len(binary_data))
+    receivedd_data = RecievedData(binary_data,huffman_codes)
+    recieved_data.show_image()
+
+
+    
