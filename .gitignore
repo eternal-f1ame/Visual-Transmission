@@ -1,4 +1,4 @@
-/Python_Files/bin
-/Python_Files/include
-/Python_Files/lib
-/Python_Files/share
+./Python_Files/bin
+./Python_Files/include
+./Python_Files/lib
+./Python_Files/share
