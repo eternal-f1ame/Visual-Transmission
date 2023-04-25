@@ -52,6 +52,7 @@ class RecievedData():
 
     def show_image(self):
         plt.imshow(self.img, cmap='gray')
+        plt.title("Received Image")
         plt.show()
 
     def recieve(self):
@@ -118,7 +119,7 @@ if __name__ == '__main__':
             else:
                 binary_data+='0'
     print(len(binary_data))
-    receivedd_data = RecievedData(binary_data,huffman_codes)
+    recieved_data = RecievedData(binary_data,huffman_codes)
     recieved_data.show_image()
 
 

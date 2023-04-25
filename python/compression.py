@@ -71,6 +71,7 @@ class TransmissionData():
         
     def show_image(self):
         plt.imshow(self.img, cmap='gray')
+        plt.title("Transmitted Image")
         plt.show()
 
     def send(self):
@@ -80,7 +81,7 @@ class TransmissionData():
             for i in range(len(self.encoded_string)):
                 ser.write(bytearray(self.encoded_string[i],'ascii'))
                 print(i,ser.readline().decode('ascii'))
-
+        return 
     def gen_huffman_codes(images_dir):
         all_strings = []
         for image in os.listdir(images_dir):
