@@ -4,11 +4,12 @@ ser = serial.Serial("/dev/tty.usbmodem11201", baudrate = 9600, timeout=1)
 # temp = ""
 iters = 0
 vals = []
+print("Started Receiving")
 while 1:
     arduinoData = ser.readline()
     # temp+=arduinoData
     # print(arduinoData)
-    if(arduinoData == b'\xd9\n'):
+    if(arduinoData == b'\xd9\n' or arduinoData ==b'\0xff\n'):
         print("Started")
     elif(arduinoData== b''):
         iters+=1
@@ -26,6 +27,7 @@ while 1:
 # print(len(temp))
 with open("Serial_out.txt","w") as f:
     f.write(",".join(str(item) for item in vals))
+print("Finished Receiving")
 
     
 
