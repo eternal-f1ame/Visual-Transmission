@@ -29,13 +29,25 @@ ___
 
 ## Instructions
 
-* To Enter
+* Open two different terminal
+* Ensure that the ENV is activated
+* Navigate to the /python folder
+* Enter the respective commands
+
+```shell
+python compression.py
+```
+
+```shell
+python retrieval.py
+```
 
 ___
 
 ## Structure
 
-* Explain Rep Structure
+* /python consists of files compression.py and retrieval.py which are used for communicating with arduino
+* /arduino has files for signal reception and trnsmisson with the help of serial port
 * For more comprehensive analysis and comparison, refer to [report](/documents/report.pdf).
 
 ___
